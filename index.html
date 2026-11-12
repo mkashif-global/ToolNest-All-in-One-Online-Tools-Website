@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#f5f2ec">
+	<title>Serein Scents | A little closer to yourself</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			color-scheme: light;
+			--ink: #20231f;
+			--muted: #73756e;
+			--paper: #f5f2ec;
+			--white: #fffefa;
+			--line: #dedbd2;
+			--green: #285947;
+			--green-dark: #1d4235;
+			--coral: #c36f56;
+			--serif: "Playfair Display", Georgia, serif;
+			--sans: "DM Sans", "Segoe UI", sans-serif;
+		}
+		* { box-sizing: border-box; }
+		html { scroll-behavior: smooth; }
+		body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 15px; }
+		button, input, textarea { font: inherit; }
+		button, a { -webkit-tap-highlight-color: transparent; }
+		button { color: inherit; }
+		a { color: inherit; text-decoration: none; }
+		.announcement { padding: 9px 20px; background: var(--green-dark); color: #f5f2ec; text-align: center; font-size: 11px; letter-spacing: .08em; }
+		.site-header { position: sticky; z-index: 5; top: 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 76px; padding: 0 max(5vw, 22px); background: rgba(245,242,236,.96); border-bottom: 1px solid rgba(32,35,31,.1); backdrop-filter: blur(14px); }
+		.brand { font-family: var(--serif); font-size: 25px; letter-spacing: .01em; white-space: nowrap; }
+		.brand span { color: var(--coral); }
+		.main-nav { display: flex; gap: 36px; align-items: center; }
+		.main-nav a { padding: 29px 0 26px; color: #4b4e48; font-size: 13px; border-bottom: 2px solid transparent; }
+		.main-nav a:hover, .main-nav a.active { color: var(--green); border-color: var(--green); }
+		.header-actions { display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
+		.bag-button { display: inline-flex; gap: 9px; align-items: center; padding: 10px 0 10px 12px; background: transparent; border: 0; cursor: pointer; font-size: 13px; }
+		.bag-count { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--green); color: white; font-size: 11px; }
+		.mobile-menu { display: none; }
+		.view { display: none; min-height: 70vh; }
+		.view.active { display: block; animation: enter .35s ease both; }
+		@keyframes enter { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+		.hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 570px; background: #e6e6dc; }
+		.hero-copy { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 70px max(6vw, 30px) 72px max(10vw, 48px); }
+		.eyebrow { margin: 0 0 19px; color: var(--green); font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+		h1, h2, h3, p { margin-top: 0; }
+		.hero h1 { max-width: 540px; margin-bottom: 21px; font: 500 clamp(42px, 5.2vw, 68px)/1.08 var(--serif); }
+		.hero-copy > p:not(.eyebrow) { max-width: 390px; margin-bottom: 30px; color: #555950; font-size: 15px; line-height: 1.8; }
+		.button { display: inline-flex; justify-content: center; align-items: center; min-height: 48px; padding: 0 24px; border: 1px solid var(--green); background: var(--green); color: white; cursor: pointer; font-size: 13px; font-weight: 600; transition: background .2s, color .2s, transform .2s; }
+		.button:hover { background: var(--green-dark); transform: translateY(-1px); }
+		.button.outline { background: transparent; color: var(--green); }
+		.button.outline:hover { background: var(--green); color: white; }
+		.button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+		.hero-image { position: relative; min-height: 440px; overflow: hidden; background: #807d68; }
+		.hero-image img { width: 100%; height: 100%; position: absolute; object-fit: cover; object-position: center 56%; }
+		.hero-image::after { position: absolute; inset: 0; content: ""; background: linear-gradient(90deg, rgba(35,37,29,.12), transparent 45%), linear-gradient(0deg, rgba(35,37,29,.15), transparent 45%); pointer-events: none; }
+		.hero-caption { position: absolute; z-index: 1; right: 28px; bottom: 24px; color: white; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+		.promise-row { display: grid; grid-template-columns: repeat(3, 1fr); padding: 25px 8vw; border-bottom: 1px solid var(--line); background: var(--white); }
+		.promise { display: flex; justify-content: center; align-items: center; gap: 11px; padding: 5px 15px; color: #4a4d46; font-size: 12px; }
+		.promise + .promise { border-left: 1px solid var(--line); }
+		.promise-mark { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); }
+		.section { padding: 82px max(6vw, 24px); }
+		.section-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 30px; }
+		.section-heading h2, .page-heading h1 { margin: 0; font: 500 38px/1.15 var(--serif); }
+		.section-heading p { max-width: 370px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+		.product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+		.product-card { min-width: 0; }
+		.product-image { position: relative; overflow: hidden; aspect-ratio: 4 / 4.4; background: #e3dfd5; }
+		.product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+		.product-card:hover .product-image img { transform: scale(1.035); }
+		.product-tag { position: absolute; top: 14px; left: 14px; padding: 7px 10px; background: var(--white); color: var(--green-dark); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+		.product-info { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 16px 1px 0; }
+		.product-info h3 { margin: 0; font: 500 20px var(--serif); }
+		.product-price { align-self: center; font-size: 13px; font-weight: 600; white-space: nowrap; }
+		.product-info p { grid-column: 1 / -1; margin: 0 0 8px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+		.add-button { grid-column: 1 / -1; justify-self: start; min-height: 38px; padding: 0 15px; border: 1px solid #aaa99e; background: transparent; cursor: pointer; font-size: 12px; }
+		.add-button:hover { border-color: var(--green); background: var(--green); color: white; }
+		.story-band { display: grid; grid-template-columns: 1fr 1fr; min-height: 330px; background: #dce4dc; }
+		.story-image { min-height: 300px; overflow: hidden; }
+		.story-image img { width: 100%; height: 100%; object-fit: cover; }
+		.story-copy { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 50px 11%; }
+		.story-copy h2 { max-width: 430px; margin-bottom: 17px; font: 500 36px/1.2 var(--serif); }
+		.story-copy p { max-width: 440px; margin-bottom: 23px; color: #565d55; font-size: 13px; line-height: 1.8; }
+		.page-wrap { width: min(1120px, 90%); margin: 0 auto; padding: 62px 0 85px; }
+		.page-heading { margin-bottom: 34px; }
+		.page-heading .eyebrow { margin-bottom: 12px; }
+		.page-heading p { margin: 12px 0 0; color: var(--muted); line-height: 1.7; }
+		.cart-layout, .checkout-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(270px, .8fr); align-items: start; gap: 48px; }
+		.cart-items { border-top: 1px solid var(--line); }
+		.cart-item { display: grid; grid-template-columns: 100px 1fr auto; align-items: center; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+		.cart-item img { width: 100px; height: 112px; object-fit: cover; }
+		.cart-item h3 { margin: 0 0 6px; font: 500 19px var(--serif); }
+		.cart-item p { margin: 0; color: var(--muted); font-size: 12px; }
+		.quantity { display: inline-flex; align-items: center; margin-top: 13px; border: 1px solid var(--line); }
+		.quantity button { width: 30px; height: 29px; border: 0; background: transparent; cursor: pointer; }
+		.quantity span { min-width: 24px; text-align: center; font-size: 12px; }
+		.cart-item-end { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+		.remove-button { padding: 2px; border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 11px; text-decoration: underline; }
+		.summary { padding: 24px; background: var(--white); border: 1px solid var(--line); }
+		.summary h2 { margin-bottom: 19px; font: 500 22px var(--serif); }
+		.summary-line { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; color: #5d605a; font-size: 13px; }
+		.summary-line.total { margin-top: 7px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink); font-weight: 700; }
+		.summary .button { width: 100%; margin-top: 18px; }
+		.empty-state { padding: 55px 25px; text-align: center; border: 1px solid var(--line); background: var(--white); }
+		.empty-state h2 { margin-bottom: 10px; font: 500 25px var(--serif); }
+		.empty-state p { margin-bottom: 20px; color: var(--muted); }
+		.form-panel { padding: 27px; background: var(--white); border: 1px solid var(--line); }
+		.form-panel h2 { margin: 0 0 20px; font: 500 23px var(--serif); }
+		.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+		.field { display: flex; flex-direction: column; gap: 7px; }
+		.field.full { grid-column: 1 / -1; }
+		.field label { font-size: 12px; font-weight: 600; }
+		.field input, .field textarea { width: 100%; padding: 12px; border: 1px solid #d5d3cb; border-radius: 0; outline: 0; background: #fffefa; }
+		.field input:focus, .field textarea:focus { border-color: var(--green); box-shadow: 0 0 0 2px rgba(40,89,71,.1); }
+		.field textarea { min-height: 76px; resize: vertical; }
+		.payment-option { display: flex; align-items: flex-start; gap: 11px; padding: 15px; border: 1px solid var(--green); background: #f2f6f1; font-size: 13px; }
+		.payment-option input { margin-top: 2px; accent-color: var(--green); }
+		.payment-option small { display: block; margin-top: 4px; color: var(--muted); line-height: 1.5; }
+		.checkout-note { margin: 15px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+		.success-panel { max-width: 700px; margin: 10px auto; padding: 55px 30px; background: var(--white); border: 1px solid var(--line); text-align: center; }
+		.success-mark { display: grid; place-items: center; width: 46px; height: 46px; margin: 0 auto 18px; border-radius: 50%; background: #e0ece1; color: var(--green); font-size: 21px; }
+		.success-panel h1 { margin-bottom: 12px; font: 500 36px var(--serif); }
+		.success-panel p { color: var(--muted); line-height: 1.7; }
+		.order-number { display: inline-block; margin: 5px 0 25px; padding: 10px 14px; background: var(--paper); font-size: 13px; }
+		.contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 55px; }
+		.contact-copy h2 { max-width: 420px; margin-bottom: 15px; font: 500 36px/1.2 var(--serif); }
+		.contact-copy > p { max-width: 420px; color: var(--muted); line-height: 1.8; }
+		.contact-details { margin-top: 28px; border-top: 1px solid var(--line); }
+		.contact-row { display: flex; justify-content: space-between; gap: 20px; padding: 15px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+		.contact-row span:first-child { color: var(--muted); }
+		.contact-row a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+		.contact-box { padding: 28px; background: #e5e8de; }
+		.contact-box h3 { margin: 0 0 11px; font: 500 24px var(--serif); }
+		.contact-box p { color: #5e635a; font-size: 13px; line-height: 1.7; }
+		.admin-login { max-width: 460px; margin: 15px auto; padding: 30px; background: var(--white); border: 1px solid var(--line); }
+		.admin-login h2, .admin-heading h2 { margin: 0 0 10px; font: 500 27px var(--serif); }
+		.admin-login p, .admin-heading p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+		.admin-login .field { margin: 20px 0 15px; }
+		.admin-login .button { width: 100%; }
+		.admin-error { min-height: 18px; margin: 0; color: #a83f32 !important; font-size: 12px !important; }
+		.admin-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 28px; }
+		.admin-heading .button { flex: 0 0 auto; }
+		.admin-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 28px; }
+		.admin-metric { padding: 20px; background: var(--white); border: 1px solid var(--line); }
+		.admin-metric span { display: block; margin-bottom: 10px; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+		.admin-metric strong { font: 500 26px var(--serif); }
+		.admin-orders { border: 1px solid var(--line); background: var(--white); }
+		.admin-orders-title { padding: 19px 20px; border-bottom: 1px solid var(--line); font: 500 21px var(--serif); }
+		.admin-table-wrap { overflow-x: auto; }
+		.admin-table { width: 100%; min-width: 780px; border-collapse: collapse; text-align: left; }
+		.admin-table th, .admin-table td { padding: 13px 16px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 12px; }
+		.admin-table th { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+		.admin-table tr:last-child td { border-bottom: 0; }
+		.admin-table td strong { display: block; margin-bottom: 4px; }
+		.admin-table td small { color: var(--muted); line-height: 1.6; }
+		.admin-table select { min-width: 115px; padding: 8px 9px; border: 1px solid var(--line); background: var(--white); color: var(--ink); }
+		.admin-empty { padding: 34px 20px; color: var(--muted); text-align: center; font-size: 13px; }
+		.site-footer { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; padding: 32px max(6vw, 24px); background: #222a24; color: #f1efe7; }
+		.site-footer .brand { font-size: 22px; }
+		.site-footer p { margin: 8px 0 0; color: #b9beb7; font-size: 11px; }
+		.footer-links { display: flex; gap: 22px; font-size: 12px; }
+		.footer-links a:hover { text-decoration: underline; }
+		.toast { position: fixed; z-index: 10; right: 22px; bottom: 22px; padding: 14px 18px; background: var(--green-dark); color: white; box-shadow: 0 8px 28px #152a2040; font-size: 13px; opacity: 0; transform: translateY(8px); transition: .2s; pointer-events: none; }
+		.toast.show { opacity: 1; transform: translateY(0); }
+		@media (max-width: 760px) {
+			.announcement { font-size: 10px; }
+			.site-header { min-height: 65px; grid-template-columns: 1fr auto; padding: 0 20px; }
+			.brand { font-size: 22px; }
+			.main-nav { position: absolute; top: 64px; right: 0; left: 0; display: none; justify-content: center; gap: 30px; padding: 0 20px; background: var(--paper); border-bottom: 1px solid var(--line); }
+			.main-nav.open { display: flex; }
+			.main-nav a { padding: 16px 0; }
+			.header-actions { grid-column: 2; grid-row: 1; }
+			.mobile-menu { display: inline-flex; justify-content: center; align-items: center; width: 38px; height: 38px; border: 1px solid var(--line); background: transparent; cursor: pointer; font-size: 17px; }
+			.bag-button { gap: 6px; padding-left: 0; font-size: 12px; }
+			.hero { grid-template-columns: 1fr; }
+			.hero-copy { padding: 58px 8vw 45px; }
+			.hero h1 { font-size: 48px; }
+			.hero-image { min-height: 340px; }
+			.promise-row { padding: 16px 10px; }
+			.promise { flex-direction: column; gap: 7px; padding: 4px 6px; text-align: center; font-size: 10px; }
+			.section { padding: 58px 22px; }
+			.section-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
+			.section-heading h2, .page-heading h1 { font-size: 32px; }
+			.product-grid { grid-template-columns: 1fr 1fr; gap: 27px 14px; }
+			.product-info h3 { font-size: 18px; }
+			.product-price { font-size: 12px; }
+			.product-image { aspect-ratio: 3 / 3.8; }
+			.story-band { grid-template-columns: 1fr; }
+			.story-image { min-height: 260px; }
+			.story-copy { padding: 39px 25px 46px; }
+			.story-copy h2 { font-size: 31px; }
+			.page-wrap { width: auto; margin: 0 20px; padding: 43px 0 62px; }
+			.cart-layout, .checkout-layout { grid-template-columns: 1fr; gap: 25px; }
+			.cart-item { grid-template-columns: 76px 1fr auto; gap: 12px; }
+			.cart-item img { width: 76px; height: 90px; }
+			.cart-item h3 { font-size: 17px; }
+			.contact-layout { grid-template-columns: 1fr; gap: 30px; }
+			.contact-copy h2 { font-size: 32px; }
+			.admin-metrics { grid-template-columns: 1fr 1fr; }
+			.admin-heading { flex-direction: column; }
+			.site-footer { grid-template-columns: 1fr; }
+			.footer-links { flex-wrap: wrap; gap: 16px; }
+		}
+		@media (max-width: 390px) {
+			.hero h1 { font-size: 42px; }
+			.main-nav { gap: 23px; }
+			.product-grid { grid-template-columns: 1fr; }
+			.product-image { aspect-ratio: 4 / 3.8; }
+			.form-grid { grid-template-columns: 1fr; }
+			.field.full { grid-column: auto; }
+		}
+		@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+	</style>
+</head>
+<body>
+	<div class="announcement">COMPLIMENTARY DELIVERY ON ORDERS OVER Rs. 3,000</div>
+	<header class="site-header">
+		<a class="brand" href="#home" aria-label="Serein Scents home">serein<span>.</span></a>
+		<nav class="main-nav" id="main-nav" aria-label="Main navigation">
+			<a href="#home" data-route="home">Home</a>
+			<a href="#shop" data-route="shop">Shop</a>
+			<a href="#contact" data-route="contact">Contact</a>
+		</nav>
+		<div class="header-actions">
+			<button class="bag-button" type="button" data-route="cart" aria-label="Open shopping bag">Bag <span class="bag-count" id="bag-count">0</span></button>
+			<button class="mobile-menu" id="menu-button" type="button" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+		</div>
+	</header>
+
+	<main>
+		<section class="view" id="home" aria-label="Home">
+			<div class="hero">
+				<div class="hero-copy">
+					<p class="eyebrow">Small-batch fragrance · Jaipur</p>
+					<h1>A little closer to yourself.</h1>
+					<p>Thoughtful scents, made to be lived in. Find your everyday signature in our collection of quietly distinctive perfumes.</p>
+					<a class="button" href="#shop">Explore the collection</a>
+				</div>
+				<div class="hero-image">
+					<img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1400&q=85" alt="A bottle of fine fragrance in warm natural light">
+					<span class="hero-caption">Scent, made personal</span>
+				</div>
+			</div>
+			<div class="promise-row" aria-label="Our standards">
+				<div class="promise"><span class="promise-mark"></span>Blended in small batches</div>
+				<div class="promise"><span class="promise-mark"></span>Thoughtful ingredients</div>
+				<div class="promise"><span class="promise-mark"></span>Wrapped with care</div>
+			</div>
+			<section class="section">
+				<div class="section-heading">
+					<div><p class="eyebrow">The edit</p><h2>Find your note.</h2></div>
+					<p>Three considered fragrances. Each one is designed to feel like it was always yours.</p>
+				</div>
+				<div class="product-grid" id="featured-products"></div>
+			</section>
+			<section class="story-band">
+				<div class="story-image"><img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=1200&q=80" alt="Perfume ingredients and botanicals arranged on a work table"></div>
+				<div class="story-copy">
+					<p class="eyebrow">Made with intention</p>
+					<h2>Good fragrance should feel like a memory in the making.</h2>
+					<p>We make considered, wearable perfumes in small batches, taking inspiration from the colours, gardens and changing light of our home in Jaipur.</p>
+					<a class="button outline" href="#contact">Come say hello</a>
+				</div>
+			</section>
+		</section>
+
+		<section class="view" id="shop" aria-label="Shop">
+			<div class="page-wrap">
+				<div class="page-heading"><p class="eyebrow">The collection</p><h1>Find your note.</h1><p>Distinctive scents, blended in Jaipur and ready to make your own.</p></div>
+				<div class="product-grid" id="all-products"></div>
+			</div>
+		</section>
+
+		<section class="view" id="cart" aria-label="Shopping bag">
+			<div class="page-wrap">
+				<div class="page-heading"><p class="eyebrow">Your selection</p><h1>Your bag</h1></div>
+				<div id="cart-content"></div>
+			</div>
+		</section>
+
+		<section class="view" id="checkout" aria-label="Checkout">
+			<div class="page-wrap">
+				<div class="page-heading"><p class="eyebrow">Almost yours</p><h1>Checkout</h1></div>
+				<div id="checkout-content"></div>
+			</div>
+		</section>
+
+		<section class="view" id="contact" aria-label="Contact">
+			<div class="page-wrap">
+				<div class="page-heading"><p class="eyebrow">We'd love to hear from you</p><h1>Contact</h1></div>
+				<div class="contact-layout">
+					<div class="contact-copy">
+						<h2>A good scent is better shared.</h2>
+						<p>Questions about a fragrance, an order, or a gift? Get in touch and we'll be happy to help.</p>
+						<div class="contact-details">
+							<div class="contact-row"><span>Email</span><a href="mailto:hello@sereinscents.example">hello@sereinscents.example</a></div>
+							<div class="contact-row"><span>Visit</span><span>Jaipur, Rajasthan</span></div>
+							<div class="contact-row"><span>Hours</span><span>Mon–Sat, 10 am–6 pm</span></div>
+						</div>
+					</div>
+					<div class="contact-box">
+						<p class="eyebrow">A quicker hello</p>
+						<h3>Chat with us on WhatsApp</h3>
+						<p>Tell us what you're looking for. We can help you find a fragrance or check in on an order.</p>
+						<a class="button" id="whatsapp-link" href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+						<p style="margin:14px 0 0;font-size:10px">Sample contact number; update it for your business before publishing.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="view" id="order-success" aria-label="Order confirmation">
+			<div class="page-wrap"><div class="success-panel" id="success-content"></div></div>
+		</section>
+
+		<section class="view" id="admin" aria-label="Store administration">
+			<div class="page-wrap">
+				<div class="page-heading"><p class="eyebrow">Serein Scents</p><h1>Store admin</h1></div>
+				<div id="admin-content"></div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div><a class="brand" href="#home">serein<span>.</span></a><p>Small-batch fragrance, made in Jaipur.</p></div>
+		<div class="footer-links"><a href="#shop">Shop</a><a href="#contact">Contact</a><a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer">WhatsApp</a><a href="#admin">Admin</a></div>
+	</footer>
+	<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+	<script>
+		const products = [
+			{ id: "citrus", name: "Citrus No. 08", note: "Bergamot · neroli · cedar", description: "Bright citrus settles into soft woods. An open-window kind of morning.", price: 1890, tag: "Bestseller", image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=80", alt: "Amber perfume bottle on a warm stone surface" },
+			{ id: "fig", name: "Velvet Fig", note: "Fig leaf · iris · musk", description: "Green fig and powdery iris, softened with a close-to-skin musk.", price: 2250, tag: "New blend", image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=80", alt: "Perfume bottle styled with soft botanical details" },
+			{ id: "rain", name: "After Rain", note: "Vetiver · jasmine · petrichor", description: "Earth after the first rain, with a little jasmine in the air.", price: 1690, tag: "Everyday", image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=900&q=80", alt: "Minimal fragrance bottle with a deep, earthy palette" }
+		];
+		const formatPrice = amount => `Rs. ${amount.toLocaleString("en-IN")}`;
+		const getCart = () => JSON.parse(localStorage.getItem("serein-cart") || "{}") || {};
+		const saveCart = cart => { localStorage.setItem("serein-cart", JSON.stringify(cart)); updateBagCount(); };
+		let toastTimer;
+
+		function productCard(product) {
+			return `<article class="product-card"><div class="product-image"><img src="${product.image}" alt="${product.alt}" loading="lazy"><span class="product-tag">${product.tag}</span></div><div class="product-info"><h3>${product.name}</h3><span class="product-price">${formatPrice(product.price)}</span><p>${product.note}<br>${product.description}</p><button class="add-button" type="button" data-add="${product.id}">Add to bag</button></div></article>`;
+		}
+		function updateBagCount() {
+			const count = Object.values(getCart()).reduce((sum, quantity) => sum + quantity, 0);
+			document.getElementById("bag-count").textContent = count;
+			document.querySelector(".bag-button").setAttribute("aria-label", `Open shopping bag, ${count} ${count === 1 ? "item" : "items"}`);
+		}
+		function cartRows() {
+			const cart = getCart();
+			return products.filter(product => cart[product.id]).map(product => ({ ...product, quantity: cart[product.id] }));
+		}
+		function cartTotals() {
+			const subtotal = cartRows().reduce((sum, item) => sum + item.price * item.quantity, 0);
+			const shipping = subtotal === 0 || subtotal >= 3000 ? 0 : 120;
+			return { subtotal, shipping, total: subtotal + shipping };
+		}
+		function summaryMarkup() {
+			const totals = cartTotals();
+			return `<aside class="summary"><h2>Order summary</h2><div class="summary-line"><span>Subtotal</span><span>${formatPrice(totals.subtotal)}</span></div><div class="summary-line"><span>Delivery</span><span>${totals.shipping ? formatPrice(totals.shipping) : "Complimentary"}</span></div><div class="summary-line total"><span>Total</span><span>${formatPrice(totals.total)}</span></div></aside>`;
+		}
+		function renderCart() {
+			const items = cartRows();
+			const target = document.getElementById("cart-content");
+			if (!items.length) {
+				target.innerHTML = `<div class="empty-state"><h2>Your bag is taking a breather.</h2><p>Find a fragrance that feels like you.</p><a class="button" href="#shop">Explore the collection</a></div>`;
+				return;
+			}
+			const rows = items.map(item => `<article class="cart-item"><img src="${item.image}" alt="${item.alt}"><div><h3>${item.name}</h3><p>${item.note}</p><div class="quantity" aria-label="Quantity for ${item.name}"><button type="button" data-quantity="${item.id}" data-delta="-1" aria-label="Decrease quantity">−</button><span>${item.quantity}</span><button type="button" data-quantity="${item.id}" data-delta="1" aria-label="Increase quantity">+</button></div></div><div class="cart-item-end"><span>${formatPrice(item.price * item.quantity)}</span><button type="button" class="remove-button" data-remove="${item.id}">Remove</button></div></article>`).join("");
+			target.innerHTML = `<div class="cart-layout"><div class="cart-items">${rows}</div><div>${summaryMarkup()}<button class="button" type="button" data-route="checkout" style="width:100%;margin-top:14px">Continue to checkout</button></div></div>`;
+		}
+		function renderCheckout() {
+			const target = document.getElementById("checkout-content");
+			if (!cartRows().length) {
+				target.innerHTML = `<div class="empty-state"><h2>Your bag is empty.</h2><p>Add a fragrance before heading to checkout.</p><a class="button" href="#shop">Browse the shop</a></div>`;
+				return;
+			}
+			target.innerHTML = `<div class="checkout-layout"><form class="form-panel" id="checkout-form"><h2>Delivery details</h2><div class="form-grid"><div class="field"><label for="customer-name">Full name</label><input id="customer-name" name="name" autocomplete="name" required></div><div class="field"><label for="customer-phone">Phone</label><input id="customer-phone" name="phone" type="tel" autocomplete="tel" required></div><div class="field full"><label for="customer-email">Email</label><input id="customer-email" name="email" type="email" autocomplete="email" required></div><div class="field full"><label for="customer-address">Street address</label><textarea id="customer-address" name="address" autocomplete="street-address" required></textarea></div><div class="field"><label for="customer-city">City</label><input id="customer-city" name="city" autocomplete="address-level2" required></div><div class="field"><label for="customer-postal">Postal code</label><input id="customer-postal" name="postal" autocomplete="postal-code" required></div><div class="field full"><label>Payment method</label><label class="payment-option"><input type="radio" name="payment" value="cod" checked><span><strong>Cash on Delivery</strong><small>Pay in cash when your order arrives.</small></span></label></div><div class="field full"><button class="button" type="submit">Place order · ${formatPrice(cartTotals().total)}</button><p class="checkout-note">Demo checkout: details are saved only in this browser. No payment is collected or shipment arranged.</p></div></div></form><div>${summaryMarkup()}</div></div>`;
+		}
+		function renderSuccess(order) {
+			document.getElementById("success-content").innerHTML = `<div class="success-mark" aria-hidden="true">✓</div><p class="eyebrow">Order received</p><h1>Thank you, ${escapeText(order.name.split(" ")[0])}.</h1><p>Your demo order has been recorded in this browser with Cash on Delivery selected.</p><div class="order-number">Order ${order.number} · ${formatPrice(order.total)}</div><p>For a real store, this confirmation and order must come from WooCommerce.</p><a class="button outline" href="#shop">Continue shopping</a>`;
+		}
+		function renderAdmin() {
+			const target = document.getElementById("admin-content");
+			if (sessionStorage.getItem("serein-admin-auth") !== "true") {
+				target.innerHTML = `<form class="admin-login" id="admin-login-form"><h2>Welcome back.</h2><p>Sign in to review orders placed in this browser.</p><div class="field"><label for="admin-password">Admin password</label><input id="admin-password" name="password" type="password" autocomplete="current-password" required></div><p class="admin-error" id="admin-error" role="alert"></p><button class="button" type="submit">Sign in</button></form>`;
+				return;
+			}
+			const orders = JSON.parse(localStorage.getItem("serein-orders") || "[]");
+			const safeOrders = Array.isArray(orders) ? orders : [];
+			const revenue = safeOrders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+			const statusOptions = ["New", "Processing", "Shipped", "Complete", "Cancelled"];
+			const rows = safeOrders.map((order, index) => ({ order, index }))
+				.sort((first, second) => new Date(second.order.createdAt) - new Date(first.order.createdAt))
+				.map(({ order, index }) => {
+					const status = statusOptions.includes(order.status) ? order.status : "New";
+					const items = (order.items || []).map(item => `${escapeText(item.name)} × ${Number(item.quantity) || 1}`).join(", ");
+					const date = new Date(order.createdAt).toLocaleDateString();
+					const options = statusOptions.map(option => `<option value="${option}"${option === status ? " selected" : ""}>${option}</option>`).join("");
+					return `<tr><td><strong>${escapeText(order.number || "Order")}</strong><small>${escapeText(date)}</small></td><td><strong>${escapeText(order.name || "Customer")}</strong><small>${escapeText(order.email || "")}<br>${escapeText(order.phone || "")}</small></td><td>${items || "—"}<br><small>${escapeText(order.address || "")}, ${escapeText(order.city || "")}</small></td><td>${escapeText(order.payment || "Cash on Delivery")}</td><td><strong>${formatPrice(Number(order.total) || 0)}</strong></td><td><select data-order-status="${index}" aria-label="Status for ${escapeText(order.number || "order")}">${options}</select></td></tr>`;
+				}).join("");
+			target.innerHTML = `<div class="admin-heading"><div><h2>Orders</h2><p>Review customer orders saved in this browser.</p></div><button class="button outline" type="button" data-admin-logout>Sign out</button></div><div class="admin-metrics"><div class="admin-metric"><span>Orders</span><strong>${safeOrders.length}</strong></div><div class="admin-metric"><span>Order value</span><strong>${formatPrice(revenue)}</strong></div><div class="admin-metric"><span>Payment method</span><strong>Cash on Delivery</strong></div></div><section class="admin-orders"><div class="admin-orders-title">Recent orders</div>${rows ? `<div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Order</th><th>Customer</th><th>Items & delivery</th><th>Payment</th><th>Total</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>` : `<div class="admin-empty">No orders have been placed yet.</div>`}</section>`;
+		}
+		function escapeText(value) {
+			return value.replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]);
+		}
+		function route() {
+			const requested = location.hash.slice(1) || "home";
+			const id = ["home", "shop", "cart", "checkout", "contact", "order-success", "admin"].includes(requested) ? requested : "home";
+			document.querySelectorAll(".view").forEach(view => view.classList.toggle("active", view.id === id));
+			document.querySelectorAll(".main-nav a").forEach(link => link.classList.toggle("active", link.dataset.route === id));
+			document.getElementById("main-nav").classList.remove("open");
+			document.getElementById("menu-button").setAttribute("aria-expanded", "false");
+			if (id === "cart") renderCart();
+			if (id === "checkout") renderCheckout();
+			if (id === "admin") renderAdmin();
+			window.scrollTo(0, 0);
+		}
+		function showToast(message) {
+			const toast = document.getElementById("toast");
+			toast.textContent = message;
+			toast.classList.add("show");
+			clearTimeout(toastTimer);
+			toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+		}
+
+		document.getElementById("featured-products").innerHTML = products.map(productCard).join("");
+		document.getElementById("all-products").innerHTML = products.map(productCard).join("");
+		updateBagCount();
+		window.addEventListener("hashchange", route);
+		route();
+		document.addEventListener("click", event => {
+			const addButton = event.target.closest("[data-add]");
+			const routeButton = event.target.closest("[data-route]");
+			const quantityButton = event.target.closest("[data-quantity]");
+			const removeButton = event.target.closest("[data-remove]");
+			if (addButton) {
+				const cart = getCart();
+				cart[addButton.dataset.add] = (cart[addButton.dataset.add] || 0) + 1;
+				saveCart(cart);
+				showToast(`${products.find(product => product.id === addButton.dataset.add).name} added to your bag`);
+			}
+			if (routeButton) {
+				location.hash = routeButton.dataset.route;
+			}
+			if (quantityButton) {
+				const cart = getCart();
+				const id = quantityButton.dataset.quantity;
+				cart[id] = (cart[id] || 0) + Number(quantityButton.dataset.delta);
+				if (cart[id] <= 0) delete cart[id];
+				saveCart(cart);
+				renderCart();
+			}
+			if (removeButton) {
+				const cart = getCart();
+				delete cart[removeButton.dataset.remove];
+				saveCart(cart);
+				renderCart();
+			}
+			if (event.target.closest("#menu-button")) {
+				const nav = document.getElementById("main-nav");
+				nav.classList.toggle("open");
+				document.getElementById("menu-button").setAttribute("aria-expanded", String(nav.classList.contains("open")));
+			}
+			if (event.target.closest("[data-admin-logout]")) {
+				sessionStorage.removeItem("serein-admin-auth");
+				renderAdmin();
+			}
+		});
+		document.addEventListener("change", event => {
+			if (!event.target.matches("[data-order-status]")) return;
+			const orders = JSON.parse(localStorage.getItem("serein-orders") || "[]");
+			const index = Number(event.target.dataset.orderStatus);
+			if (!orders[index]) return;
+			orders[index].status = event.target.value;
+			localStorage.setItem("serein-orders", JSON.stringify(orders));
+			renderAdmin();
+		});
+		document.addEventListener("submit", event => {
+			if (event.target.id === "admin-login-form") {
+				event.preventDefault();
+				const password = new FormData(event.target).get("password").trim();
+				if (password !== "admin321") {
+					document.getElementById("admin-error").textContent = "That password didn't match. Try again.";
+					return;
+				}
+				sessionStorage.setItem("serein-admin-auth", "true");
+				renderAdmin();
+				return;
+			}
+			if (event.target.id !== "checkout-form") return;
+			event.preventDefault();
+			if (!event.target.reportValidity()) return;
+			const form = new FormData(event.target);
+			const order = {
+				number: `SR-${Date.now().toString().slice(-7)}`,
+				name: form.get("name"), phone: form.get("phone"), email: form.get("email"),
+				address: form.get("address"), city: form.get("city"), postal: form.get("postal"),
+				payment: "Cash on Delivery", items: cartRows(), total: cartTotals().total,
+				createdAt: new Date().toISOString()
+			};
+			const orders = JSON.parse(localStorage.getItem("serein-orders") || "[]");
+			orders.push(order);
+			localStorage.setItem("serein-orders", JSON.stringify(orders));
+			saveCart({});
+			renderSuccess(order);
+			location.hash = "order-success";
+		});
+	</script>
+</body>
+</html>
